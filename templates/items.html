@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marketplace Items</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Chatbot CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='chatbot/chatbot.css') }}">
+
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #e6f7ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+        }
+
+        .navbar {
+            background: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(12px);
+        }
+
+        .navbar-nav .nav-link {
+            color: #e6f7ff !important;
+            font-weight: 500;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #00ffcc !important;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        .slogan-container {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            white-space: nowrap;
+        }
+
+        .slogan {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff9aeb;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 74, 220, 0.8);
+            padding-right: 100%;
+            animation: moveSlogan 25s linear infinite;
+        }
+
+        @keyframes moveSlogan {
+            0% {
+                transform: translateX(100%);
+            }
+
+            100% {
+                transform: translateX(-100%);
+            }
+        }
+
+        .container {
+            margin-top: 120px;
+        }
+
+        .item-card {
+            background: rgba(20, 30, 50, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 6px 15px rgba(0, 255, 200, 0.2);
+            transition: transform 0.3s;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .item-card:hover {
+            transform: scale(1.05);
+        }
+
+        .item-card img {
+            max-width: 100%;
+            height: 200px;
+            border-radius: 12px;
+            object-fit: contain;
+            margin-bottom: 15px;
+        }
+
+        .price {
+            font-weight: 600;
+            color: #00ffcc;
+        }
+
+        footer {
+            background: #111827;
+            color: #a7c7ff;
+            padding: 20px;
+        }
+
+        .btn-add-cart {
+            background: #1ABC9C;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .btn-add-cart:hover {
+            background: #16A085;
+            color: #fff;
+        }
+
+        /* Chatbot Floating Button */
+        .chatbot-popup-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1ABC9C;
+            color: white;
+            padding: 15px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            text-decoration: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background 0.3s ease;
+            z-index: 1000;
+            cursor: pointer;
+        }
+
+        .chatbot-popup-button:hover {
+            background: #16A085;
+        }
+
+        #chatbot-popup {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            width: 300px;
+            max-height: 400px;
+            background: white;
+            border: 1px solid #ccc;
+            display: none;
+            overflow: auto;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        #chat-box {
+            height: 250px;
+            overflow-y: auto;
+            border: 1px solid #eee;
+            padding: 5px;
+        }
+
+        .user-message {
+            text-align: right;
+            background: #D1F2EB;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .bot-message {
+            text-align: left;
+            background: #F8F9F9;
+            margin: 5px;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .btn-sell {
+    display: inline-block;
+    background: linear-gradient(135deg, #ff416c, #ff4b2b);
+    color: #fff;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 12px 105px;
+    border-radius: 50px;
+    text-decoration: none;
+    text-align: center;
+    transition: all 0.4s ease;
+    box-shadow: 0 4px 15px rgba(255, 65, 108, 0.5);
+}
+
+.btn-sell:hover {
+    background: linear-gradient(135deg, #ff6a95, #ff7b54);
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(255, 65, 108, 0.8);
+}
+
+    </style>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="slogan-container">
+        <span class="slogan">Sustainable Shopping ✨ Smart Circular Economy ✨ Eco-Friendly Marketplace</span>
+    </div>
+
+    <div class="container">
+        <h1 class="mb-4">Available Items</h1>
+        <div class="row">
+            {% for item in items %}
+            <div class="col-md-4 mb-4">
+                <div class="item-card">
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" alt="{{ item.product_type }}">
+                    {% else %}
+                    <img src="https://via.placeholder.com/200x150?text=No+Image" alt="No image">
+                    {% endif %}
+                    <h3>{{ item.product_type }}</h3>
+                    <p><strong>Brand:</strong> {{ item.brand }}</p>
+                    <p><strong>Seller:</strong> {{ item.added_by or "Unknown" }}</p>
+                    <p><strong>Location:</strong> {{ item.location or "Not Provided" }}</p>
+                    <p><strong>Price:</strong>
+                        {% if item.estimated_price %}
+                        <span class="price">₹{{ "{:,}".format(item.estimated_price) }}</span>
+                        {% else %}
+                        <span style="color:orange;">Not Estimated</span>
+                        {% endif %}
+                    </p>
+
+                    <div>
+                        <a href="{{ url_for('add_to_cart', item_id=item._id) }}" class="btn-add-cart">Add to Cart 🛒</a>
+                        <a href="{{ url_for('item_view', item_id=item._id) }}" class="btn btn-outline-light mt-2">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+<a href="{{ url_for('analyze') }}" class="btn-sell mt-2">Sell Item 🛍️</a>
+    <footer>
+        <p>© 2025 Smart Circular Marketplace. All rights reserved.</p>
+    </footer>
+
+    <!-- Chatbot Floating Button -->
+    <div class="chatbot-popup-button">💬</div>
+
+    <!-- Chatbot Popup Window -->
+    <div id="chatbot-popup">
+        <div id="chat-box">
+            <div class="bot-message">Hello! How can I assist you today? 🌱</div>
+        </div>
+        <form id="chat-form">
+            <input type="text" id="user-input" placeholder="Type your message..." required style="width: 70%; padding: 5px;" />
+            <button type="submit" style="padding: 5px;">Send</button>
+        </form>
+        <div style="margin-top: 10px;">
+            <button class="predefined-question" type="button">Hello</button>
+            <button class="predefined-question" type="button">How to buy a product</button>
+            <button class="predefined-question" type="button">What is smart circular economy</button>
+        </div>
+    </div>
+
+    <script defer src="{{ url_for('static', filename='chatbot/chatbot.js') }}"></script>
+</body>
+</html>

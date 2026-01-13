@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ item.brand | default('Item') }} - {{ item.product_type | default('Product') }} Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364); 
+            color: #e6f7ff; 
+            text-align: center; 
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .item-detail { 
+            margin: 100px auto; 
+            max-width: 700px; 
+            background: rgba(20,30,50,0.9); 
+            padding: 30px; 
+            border-radius: 15px; 
+            box-shadow: 0 6px 15px rgba(0,255,200,0.25); 
+            text-align: left;
+        }
+        .item-detail img { 
+            width: 100%; 
+            border-radius: 12px; 
+            margin-bottom: 20px; 
+            object-fit: cover;
+            max-height: 400px;
+        }
+        h2 {
+            font-weight: 700;
+            color: #00ffcc;
+            margin-bottom: 20px;
+        }
+        .item-detail p {
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+        }
+        .btn-back, .btn-cart {
+            margin-top: 15px;
+            color: #fff;
+            font-weight: 600;
+            padding: 10px 25px;
+            border-radius: 8px;
+            text-decoration: none;
+            display: inline-block;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-back {
+            background: linear-gradient(45deg,#00ffcc,#0099ff);
+        }
+        .btn-back:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(0,255,200,0.6);
+        }
+        .btn-cart {
+            background: linear-gradient(45deg,#ffcc00,#ff6600);
+            margin-right: 10px;
+        }
+        .btn-cart:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(255,204,0,0.6);
+        }
+        footer {
+            margin-top: auto;
+            background: #111827; 
+            color: #a7c7ff; 
+            padding: 15px;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="item-detail">
+        <img src="{{ item.image_url | default('https://via.placeholder.com/500x350?text=No+Image+Available') }}" 
+             alt="{{ item.brand | default('Item') }} {{ item.product_type | default('Product') }}">
+
+        <h2>{{ item.brand | default('Item') }} - {{ item.product_type | default('Product') }}</h2>
+
+        <p><strong>Category:</strong> {{ item.category | default('Uncategorized') }}</p>
+        <p><strong>Subcategory:</strong> {{ item.subcategory | default('Others') }}</p>
+        <p><strong>Year of Purchase:</strong> {{ item.year_of_purchase | default('N/A') }}</p>
+        <p><strong>Original Price:</strong> 
+            {% if item.original_price is defined and item.original_price is not none %}
+                ₹{{ "{:,}".format(item.original_price) }}
+            {% else %}
+                N/A
+            {% endif %}
+        </p>
+
+        <p><strong>Condition Score:</strong> {{ item.overall_condition | default('N/A') }}/10</p>
+        <p><strong>Damage Condition:</strong> {{ item.damage_condition | default('N/A') }}</p>
+        <p><strong>Seller:</strong> {{ item.added_by | default('Unknown') }}</p>
+        <p><strong>Seller Location:</strong> {{ item.location | default('Not Provided') }}</p>
+
+        <p><strong>Selling Price:</strong> 
+            {% if item.estimated_price is defined and item.estimated_price is not none %}
+                <span style="color:#00ffcc; font-weight:600;">₹{{ "{:,}".format(item.estimated_price) }}</span>
+            {% else %}
+                <span style="color:orange;">Not Estimated</span>
+            {% endif %}
+        </p>
+
+        {% if session.get('user') %}
+            <a href="{{ url_for('add_to_cart', item_id=item._id) }}" class="btn-cart">🛒 Add to Cart</a>
+        {% else %}
+            <p class="text-warning mt-3">Please <a href="{{ url_for('login') }}">login</a> to add to cart.</p>
+        {% endif %}
+
+        <a href="{{ url_for('items') }}" class="btn-back">⬅ Back to Items</a>
+    </div>
+
+    <footer>
+        <p>© 2025 Smart Circular Marketplace. All rights reserved.</p>
+    </footer>
+</body>
+</html>

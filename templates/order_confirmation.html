@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Smart Marketplace</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <h1>🎉 Order Placed Successfully!</h1>
+
+    <p>Thank you, <strong>{{ user }}</strong>, for your purchase.</p>
+
+    <h3>Order Summary:</h3>
+    <table border="1" cellpadding="10">
+        <thead>
+            <tr>
+                <th>Product</th>
+                <th>Price (₹)</th>
+                <th>Quantity</th>
+                <th>Subtotal (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td>{{ item.price }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price * item.quantity }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <h3>Total Paid: ₹{{ total }}</h3>
+    <p>Payment Method: <strong>{{ payment_method }}</strong></p>
+
+    <p><a href="{{ url_for('items') }}">Continue Shopping</a></p>
+</body>
+</html>

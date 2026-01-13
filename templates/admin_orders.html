@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="mb-4 text-center">📦 All Orders</h2>
+    <table class="table table-bordered table-hover shadow-sm">
+        <thead class="thead-dark">
+            <tr>
+                <th>#</th>
+                <th>User</th>
+                <th>Item</th>
+                <th>Price</th>
+                <th>Date</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for order in orders %}
+            <tr>
+                <td>{{ loop.index }}</td>
+                <td>{{ order.user or 'Unknown' }}</td>
+                <td>{{ order.item_name or 'N/A' }}</td>
+                <td>₹{{ "{:,}".format(order.price or 0) }}</td>
+                <td>{{ order.date or 'N/A' }}</td>
+                <td>
+                    <span class="badge badge-success">{{ order.status or 'Pending' }}</span>
+                </td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">No orders available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

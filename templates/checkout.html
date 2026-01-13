@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout - Smart Circular Marketplace</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #e6f7ff;
+            min-height: 100vh;
+        }
+        .checkout-container {
+            max-width: 950px;
+            margin: 80px auto 40px;
+            background: rgba(20,30,50,0.9);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0,255,200,0.25);
+        }
+        h1 {
+            text-align: center;
+            color: #00ffcc;
+            margin-bottom: 30px;
+            font-weight: 700;
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+        table th, table td {
+            padding: 12px;
+            text-align: left;
+        }
+        table th {
+            background-color: #1e2a35;
+        }
+        table tr:nth-child(even) {
+            background-color: rgba(255,255,255,0.05);
+        }
+        .total {
+            font-size: 1.3rem;
+            font-weight: 600;
+            text-align: right;
+            margin-top: 10px;
+            color: #00ffcc;
+        }
+        label {
+            font-weight: 500;
+        }
+        select, button {
+            padding: 10px 15px;
+            border-radius: 8px;
+            border: none;
+            margin-top: 10px;
+            width: 100%;
+            font-weight: 600;
+        }
+        select {
+            background: #1e2a35;
+            color: #fff;
+        }
+        button {
+            background: linear-gradient(45deg, #00ffcc, #0099ff);
+            color: #111;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 12px rgba(0,255,200,0.6);
+        }
+        .seller-box {
+            background: #14202e;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            color: #b9f6ff;
+        }
+        .seller-box strong {
+            color: #00ffcc;
+        }
+        .empty-cart {
+            text-align: center;
+            margin-top: 40px;
+            font-size: 1.1rem;
+        }
+        a {
+            color: #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="checkout-container">
+        <h1>🛒 Checkout</h1>
+
+        {% if cart_items %}
+        <div class="table-responsive">
+            <table class="table table-dark table-striped">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price (₹)</th>
+                        <th>Seller Details</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.brand | default('Item') }} - {{ item.product_type | default('Product') }}</td>
+                        <td>₹{{ "{:,}".format(item.estimated_price | default(0)) }}</td>
+                        <td>
+                            <div class="seller-box">
+                                <p><strong>Name:</strong> {{ item.seller.name }}</p>
+                                <p><strong>Email:</strong> {{ item.seller.email }}</p>
+                                <p><strong>Phone:</strong> {{ item.seller.phone }}</p>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="total">
+            Total: ₹{{ "{:,}".format(total_price | default(0)) }}
+        </div>
+
+        <form action="{{ url_for('checkout') }}" method="POST" class="mt-4">
+            <label for="payment_method">Payment Method:</label>
+            <select name="payment_method" id="payment_method" required>
+                <option value="Negotiation">Direct Negotiation (Recommended)</option>
+                <option value="COD">Cash on Delivery</option>
+                <option value="UPI">UPI</option>
+            </select>
+
+            <button type="submit" class="mt-3">✅ Confirm Purchase</button>
+        </form>
+
+        {% else %}
+        <div class="empty-cart">
+            <p>Your cart is empty. <a href="{{ url_for('items') }}">Go back to shop</a></p>
+        </div>
+        {% endif %}
+    </div>
+
+    <footer class="text-center mt-auto py-3" style="color:#a7c7ff; background:#111827;">
+        © 2025 Smart Circular Marketplace. All rights reserved.
+    </footer>
+</body>
+</html>

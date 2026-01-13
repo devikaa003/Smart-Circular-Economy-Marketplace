@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Circular Marketplace</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #e6f7ff;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .navbar {
+            background: rgba(10, 10, 20, 0.9);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 15px rgba(0, 255, 200, 0.3);
+        }
+
+        .navbar-brand {
+            font-weight: 700;
+            color: #00ffcc !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #e6f7ff !important;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #00ffcc !important;
+            text-shadow: 0 0 10px #00ffcc;
+        }
+
+        .slogan-container {
+            width: 100%;
+            overflow: hidden;
+            position: absolute;
+            top: 80px;
+            left: 0;
+            white-space: nowrap;
+        }
+
+        .slogan {
+            display: inline-block;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #ff9aeb;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px rgba(255, 74, 220, 0.8);
+            padding-right: 100%;
+            animation: moveSlogan 25s linear infinite;
+        }
+
+        @keyframes moveSlogan {
+            0%   { transform: translateX(100%); }
+            100% { transform: translateX(-100%); }
+        }
+
+        .hero {
+            background: rgba(20, 30, 50, 0.85); 
+            border-radius: 20px;
+            padding: 60px 20px;
+            box-shadow: 0 10px 30px rgba(0, 255, 200, 0.2);
+            margin: 150px auto 50px auto;
+            max-width: 900px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hero:hover {
+            transform: scale(1.02);
+            box-shadow: 0 12px 35px rgba(0, 255, 200, 0.3);
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            background: linear-gradient(90deg, #ff6f91, #ff9671, #ffc75f, #f9f871);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 3s infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #ff6f91; }
+            to   { text-shadow: 0 0 25px #ffc75f; }
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            margin-top: 20px;
+            color: #d1f7ff;
+            text-shadow: 0 0 8px rgba(0,255,255,0.4);
+        }
+
+        .hero .btn-primary {
+            background: linear-gradient(135deg, #00f260, #0575e6);
+            border: none;
+            padding: 12px 35px;
+            font-size: 1rem;
+            border-radius: 50px;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.4s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 200, 0.6);
+        }
+
+        .hero .btn-primary:hover {
+            background: linear-gradient(135deg, #ff416c, #ff4b2b);
+            transform: scale(1.12);
+            box-shadow: 0 0 25px rgba(255, 65, 108, 0.8);
+        }
+
+        .alert {
+            position: fixed;
+            top: 80px;
+            right: 20px;
+            z-index: 1000;
+            min-width: 250px;
+        }
+
+        footer {
+            background: #111827;
+            color: #a7c7ff;
+            padding: 20px;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #00ffcc;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-shadow: 0 0 8px #00ffcc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="#">Smart Circular Economy Marketplace</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('analyze') }}">Analyze Product</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('dashboard') }}">Dashboard</a></li>
+                {% if 'user' in session %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('logout') }}">Logout</a></li>
+                {% else %}
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {% for message in messages %}
+                    {{ message }}<br>
+                {% endfor %}
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <div class="slogan-container">
+        <p class="slogan">🌍 Redefining Value, Revolutionizing Sustainability. ♻️</p>
+    </div>
+
+    <div class="hero">
+        <h1>Welcome to the Smart Circular Marketplace</h1>
+        <p>Analyze your products, get dynamic pricing, and connect with buyers and markets.</p>
+        <a href="{{ url_for('login') }}" class="btn btn-primary">Get Started</a>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Smart Circular Marketplace. All rights reserved.</p>
+        <p><a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin | Smart Circular Marketplace</title>
+    
+    <!-- Modern clean font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap and your style -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            color: #251c1c; /* ✅ readable white text */
+            min-height: 100vh;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-top: 40px;
+            box-shadow: 0 4px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        h1, h2, h3, h4 {
+            color: #68c9b5;
+            font-weight: 600;
+        }
+
+        a, .nav-link {
+            color: #fefefe !important;
+        }
+
+        footer {
+            margin-top: 40px;
+            color: #bbb;
+        }
+
+        .table {
+            color: #110d0d;
+        }
+
+        .table thead {
+            background-color: rgba(56, 182, 157, 0.2);
+        }
+    </style>
+</head>
+
+<body>
+    {% include 'navbar.html' %}
+
+    <div class="container">
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer class="text-center mt-5 mb-3 text-muted">
+        © 2025 Smart Circular Marketplace
+    </footer>
+</body>
+</html>

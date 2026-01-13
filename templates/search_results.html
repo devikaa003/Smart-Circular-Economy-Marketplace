@@ -1,0 +1,196 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<style>
+  body {
+    font-family: 'Poppins', sans-serif;
+    margin: 0;
+    background: linear-gradient(135deg, rgba(63, 90, 116, 0.8), rgba(26, 188, 156, 0.8)),
+                url('https://via.placeholder.com/1920x1080') no-repeat center center/cover;
+    color: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    text-align: center;
+}
+
+/* Slogan / Header */
+.slogan-container {
+    margin-top: 20px;
+}
+
+/* Container for Search Results */
+.container {
+    width: 90%;
+    max-width: 2200px;
+    margin-top: 40px;
+}
+
+/* Card Styles for Products */
+.card {
+    background: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 15px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px; /* consistent height */
+    box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.7);
+}
+
+/* Card Image */
+.card-img-top {
+    width: 100%;
+    height: 220px; /* fixed image height */
+    object-fit: cover;
+}
+
+/* Card Body */
+.card-body {
+    padding: 15px;
+    text-align: left;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-title {
+    font-size: 1.2rem;
+    color: #00ffd5;
+    margin-bottom: 10px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    color: #ffffffcc;
+    margin-bottom: 15px;
+}
+
+/* Button */
+.btn-outline-info {
+    border-radius: 50px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.btn-outline-info:hover {
+    background-color: #00d4ff;
+    color: #000;
+}
+
+/* No Results Message */
+.no-results {
+    color: #00ffd5;
+    margin-top: 40px;
+    font-size: 1.1rem;
+}
+
+/* Select Dropdown */
+select.form-select {
+    background-color: #0f1a24;
+    color: #fff;
+    border: 1px solid #00d4ff;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+select.form-select:focus {
+    box-shadow: 0 0 10px rgba(0, 255, 255, 0.4);
+    border-color: #00ffd5;
+}
+
+option {
+    background-color: #1e2a35;
+    color: #fff;
+}
+
+/* Footer */
+footer {
+    background: #2c3e50;
+    color: #bdc3c7;
+    padding: 10px;
+    font-size: 0.9rem;
+    text-align: center;
+    width: 100%;
+}
+
+footer a {
+    color: #1abc9c;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .card {
+        height: auto;
+    }
+
+    .card-img-top {
+        height: 180px;
+    }
+}
+</style>
+
+<div class="container mt-4">
+  <h3 class="text-center text-light mb-4">
+    🔍 Search Results
+    {% if query %}
+      for "<span class="text-info">{{ query }}</span>"
+    {% endif %}
+  </h3>
+
+  {% if message %}
+    <div class="alert text-center">
+      {{ message }}
+    </div>
+  {% endif %}
+
+  {% if products %}
+  <div class="row">
+    {% for product in products %}
+    <div class="col-md-4 mb-4">
+      <div class="card h-100 shadow-lg">
+        <img 
+          src="{{ product.image_url or url_for('static', filename='images/default.png') }}" 
+          class="card-img-top" 
+          alt="{{ product.brand }}"
+          style="height: 220px; object-fit: cover; border-top-left-radius: 15px; border-top-right-radius: 15px;">
+        
+        <div class="card-body">
+          <h5 class="card-title">{{ product.brand or 'Unnamed Product' }}</h5>
+          <p class="card-text">
+            <strong>Category:</strong> {{ product.category }}<br>
+            <strong>Subcategory:</strong> {{ product.subcategory }}<br>
+            <strong>Price:</strong> ₹{{ product.estimated_price }}
+          </p>
+          <a href="{{ url_for('item_view', item_id=product._id) }}" class="btn btn-outline-info w-100">
+            View Details
+          </a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% else %}
+    <div class="no-results">
+      <i class="fas fa-search-minus fa-2x mb-3"></i><br>
+      No products found for your search.
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

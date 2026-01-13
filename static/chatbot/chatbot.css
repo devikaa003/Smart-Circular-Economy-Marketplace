@@ -1,0 +1,104 @@
+/* Chat Popup Container */
+#chatbot-popup {
+    background: #1f2937;
+    color: black;  /* changed to black */
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 255, 200, 0.2);
+    max-width: 350px;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+    padding: 15px;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Chat Display Box */
+#chat-box {
+    background: rgba(20, 30, 50, 0.9);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 15px;
+    height: 250px;
+    overflow-y: auto;
+    color: black;  /* added to override any inherited color */
+}
+
+/* User and Bot Messages */
+.user-message {
+    text-align: right;
+    background: rgba(0, 255, 200, 0.2);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    word-wrap: break-word;
+    color: black;  /* changed to black */
+}
+
+.bot-message {
+    text-align: left;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px;
+    margin: 5px 0;
+    border-radius: 10px;
+    word-wrap: break-word;
+    color: black;  /* changed to black */
+}
+
+/* Input Form Styling */
+#chat-form {
+    display: flex;
+    margin-top: 10px;
+}
+
+#user-input {
+    flex-grow: 1;
+    padding: 8px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background: #333;
+    color: rgb(233, 220, 220);  /* changed to black */
+}
+
+#chat-form button {
+    padding: 8px 12px;
+    margin-left: 5px;
+    background: #1ABC9C;
+    color: black;  /* changed to black */
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+#chat-form button:hover {
+    background: #16A085;
+}
+
+/* Predefined Question Buttons */
+.predefined-question {
+    display: inline-block;
+    background: rgba(0, 255, 200, 0.2);
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: background 0.3s ease;
+    color: black;  /* changed to black */
+    border: none;
+}
+
+.predefined-question:hover {
+    background: rgba(0, 255, 200, 0.5);
+}
+
+/* Response Block Styling */
+.response {
+    background: rgba(0, 255, 200, 0.1);
+    padding: 10px;
+    border-radius: 12px;
+    margin-top: 10px;
+    word-wrap: break-word;
+    font-size: 1rem;
+    color: black;  /* changed to black */
+}

@@ -1,0 +1,36 @@
+{
+  "categories": [
+    {
+      "id": "buyers",
+      "title": "Buyers",
+      "faqs": [
+        {
+          "id": "b1",
+          "q": "How do I buy a product?",
+          "a": "Create an account, log in, go to the product page, and click 'Buy'."
+        },
+        {
+          "id": "b2",
+          "q": "How can I return an item?",
+          "a": "Check the seller's return policy on the product page and contact support if needed."
+        }
+      ]
+    },
+    {
+      "id": "sellers",
+      "title": "Sellers",
+      "faqs": [
+        {
+          "id": "s1",
+          "q": "How can I register as a seller?",
+          "a": "Go to Sign Up \u2192 choose 'Seller' as account type and complete your profile."
+        },
+        {
+          "id": "s2",
+          "q": "How do I list a product?",
+          "a": "After login, go to Dashboard \u2192 Add Product, fill details, upload images, and publish."
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="chatbot-container">
+    <h2>🤖 Smart Circular Chatbot</h2>
+
+    <div id="chat-box" class="chat-box-content">
+        <!-- Initial placeholder message -->
+        <div class="bot-message">Select a question above or type your message to get an answer 🌱</div>
+    </div>
+
+    <!-- Form for user input -->
+    <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type your message..." required />
+        <button type="submit">Send</button>
+    </form>
+
+    <h3>Or try predefined questions:</h3>
+    <div class="predefined-questions">
+        {% for question in predefined_questions %}
+            <button class="predefined-question" type="button">{{ question }}</button>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Link to chatbot.js -->
+<script src="{{ url_for('static', filename='chatbot/chatbot.js') }}"></script>
+{% endblock %}

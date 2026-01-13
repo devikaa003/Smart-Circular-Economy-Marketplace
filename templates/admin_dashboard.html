@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center mb-4">👑 Admin Dashboard</h2>
+
+    <div class="row text-center mb-4">
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h5>Total Users</h5>
+                <h3>{{ total_users }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 shadow-sm">
+                <h5>Total Products</h5>
+                <h3>{{ total_items }}</h3>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card p-3 bg-success text-white shadow-sm">
+                <h5>Total Profit (Commission)</h5>
+                <h3>₹{{ total_commission }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <h4 class="mt-5">📊 Category-wise Commission</h4>
+
+    <table class="table table-dark table-striped mt-3 rounded-3 overflow-hidden">
+        <thead class="table-success text-dark">
+            <tr>
+                <th>Category</th>
+                <th>Commission Earned (₹)</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for row in category_data %}
+            <tr>
+                <td>{{ row['_id'] }}</td>
+                <td>₹{{ row['commission']|round(2) }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="2" class="text-center text-muted">No commission data available</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="mt-5 text-center">
+        <a href="{{ url_for('admin_users') }}" class="btn btn-gradient mx-2 px-4 py-2">View Users</a>
+        <a href="{{ url_for('admin_orders') }}" class="btn btn-gradient mx-2 px-4 py-2">View Orders</a>
+    </div>
+</div>
+{% endblock %}

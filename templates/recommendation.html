@@ -1,0 +1,229 @@
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>AI-Powered Product Recommendation</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            margin: 0;
+            background: linear-gradient(135deg, rgba(63, 90, 116, 0.8), rgba(26, 188, 156, 0.8)),
+                        url('https://via.placeholder.com/1920x1080') no-repeat center center/cover;
+            color: #fff;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .recommend-container {
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(12px);
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .content {
+            flex: 1;
+            max-width: 600px;
+            padding-right: 30px;
+            margin-right: 20px;
+            overflow-y: auto;
+            text-align: left;
+        }
+
+        .highlight {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #2ecc71;
+        }
+
+        .product-icon {
+            font-size: 3rem;
+            animation: bounce 1.5s infinite alternate;
+            margin-bottom: 20px;
+        }
+
+        @keyframes bounce {
+            from { transform: translateY(0); }
+            to { transform: translateY(-10px); }
+        }
+
+        .main-heading {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #ffffff;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin: 10px 0;
+        }
+
+        .colored-heading {
+            font-size: 1.3rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 10px 18px;
+            font-size: 1rem;
+            border-radius: 40px;
+            transition: all 0.4s ease;
+            box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+            margin-top: 20px;
+            width: 48%;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #319273, #518149);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.1);
+            box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #fff;
+            color: #319273;
+        }
+
+        #map {
+            width: 100%;
+            max-width: 500px;
+            height: 600px;
+            border-radius: 5px;
+        }
+
+        h2, h4 {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        p {
+            font-size: 1.1rem;
+        }
+
+        @media (max-width: 768px) {
+            .recommend-container {
+                flex-direction: column;
+                gap: 20px;
+                padding: 20px;
+            }
+
+            .content {
+                margin-right: 0;
+                text-align: center;
+            }
+
+            #map {
+                width: 100%;
+                height: 250px;
+                margin-top: 20px;
+            }
+
+            .btn-primary, .btn-secondary {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="recommend-container">
+        <div class="content">
+            <div class="main-heading">
+                🤖 <span>AI-Powered Product Recommendation</span>
+            </div>
+
+            <div class="colored-heading">
+                🧠 <span>AI Predictive Analysis</span>
+            </div>
+
+            <p><span class="highlight">⏳ Estimated Remaining Lifetime:</span> {{ remaining_lifespan }} years</p>
+            <p><span class="highlight">💰 AI-Based Dynamic Pricing:</span> ₹{{ estimated_price }}</p>
+            <p><span class="highlight">🛠 Overall Condition:</span> {{ overall_condition }}/10</p>
+
+            <hr />
+
+            <h4>🛒 Marketplace & Connections</h4>
+            <p>We've found the nearest buyers & facilities for you.</p>
+
+            <p><span class="highlight">📍 Nearby Facility:</span> <span id="facility">Searching your location...</span></p>
+            <p><span class="highlight">🔗 Recommended Marketplace:</span> OLX, eBay, Facebook Marketplace</p>
+
+            <div class="mt-4 d-flex justify-content-between">
+                <a href="{{ url_for('home') }}" class="btn btn-primary mb-3 w-48">🏠 Home</a>
+                <a href="{{ url_for('dashboard') }}" class="btn btn-secondary mb-3 w-48">💵 Dashboard</a>
+            </div>
+        </div>
+
+        <div id="map"></div>
+    </div>
+
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        function initMap() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude
+                    };
+
+                    const map = L.map('map').setView([userLocation.lat, userLocation.lng], 14);
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    L.marker([userLocation.lat, userLocation.lng]).addTo(map)
+                        .bindPopup("Your Location")
+                        .openPopup();
+
+                    const facilities = [
+                        { name: "Electronics Repair Shop", lat: userLocation.lat + 0.002, lng: userLocation.lng + 0.002 },
+                        { name: "Mobile Repair Center", lat: userLocation.lat - 0.003, lng: userLocation.lng - 0.003 }
+                    ];
+
+                    facilities.forEach(function (facility) {
+                        L.marker([facility.lat, facility.lng]).addTo(map)
+                            .bindPopup(facility.name)
+                            .openPopup();
+                    });
+
+                    document.getElementById("facility").innerText = facilities.length > 0 ? facilities[0].name : "No facilities found nearby";
+
+                }, function () {
+                    document.getElementById("facility").innerText = "Location access denied";
+                });
+            } else {
+                document.getElementById("facility").innerText = "Geolocation not supported";
+            }
+        }
+
+        window.onload = initMap;
+    </script>
+</body>

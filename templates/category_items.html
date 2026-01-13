@@ -1,0 +1,80 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <!-- Category Heading -->
+    <h2 class="text-center text-light mb-4">{{ category }}</h2>
+
+    <div class="row">
+        {% if items %}
+            {% for item in items %}
+                <div class="col-md-3 mb-4">
+                    <div class="card item-card shadow-sm h-100">
+                        <!-- Product Image -->
+                        <img src="{{ item.image_url or url_for('static', filename='default-image.png') }}"
+                             class="card-img-top" alt="Product Image"
+                             style="height: 200px; object-fit: cover;">
+
+                        <div class="card-body text-center d-flex flex-column">
+                            <!-- Product Brand -->
+                            <h5 class="card-title text-light">{{ item.brand }}</h5>
+
+                            <!-- Product Details -->
+                            <p class="card-text text-light mb-3">
+                                <strong>Estimated Price:</strong> 
+                                <span class="text-warning">₹{{ item.estimated_price }}</span><br>
+                                <strong>Subcategory:</strong> {{ item.subcategory }}<br>
+                                <strong>Condition:</strong> {{ item.overall_condition }}<br>
+                                <strong>Location:</strong> {{ item.location }}
+                            </p>
+
+                            <!-- View Details Button -->
+                            <a href="{{ url_for('item_view', item_id=item._id) }}" 
+                               class="btn btn-primary mt-auto w-100">
+                                View Details
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="col-12">
+                <p class="alert alert-info text-center">No items available in this category yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Custom Styles -->
+<style>
+    body {
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        font-family: 'Poppins', sans-serif;
+    }
+    h2 {
+        font-weight: bold;
+        color: #ffffff;
+    }
+    .item-card {
+        background: #1b2a38;
+        border-radius: 15px;
+        border: none;
+        transition: transform 0.3s ease-in-out;
+    }
+    .item-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+    .card-body {
+        padding: 15px;
+    }
+    .btn-primary {
+        background: #81abdb;
+        border: none;
+        border-radius: 10px;
+    }
+    .btn-primary:hover {
+        background: #033b78;
+    }
+</style>
+{% endblock %}
