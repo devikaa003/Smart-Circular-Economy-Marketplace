@@ -1,2 +1,2 @@
 # Smart-Circular-Economy-Marketplace
-web-based platform to estimate resale prices using regression models. Implemented backend services using Flask for product listings and trade workflows. Designed price prediction logic based on historical product attributes.
+Smart Circular Economy Marketplace is a full-stack web application that enables users to buy and sell pre-owned electronic products with AI-driven price estimation. The platform integrates secure user authentication, seller–buyer workflows, commission tracking, and machine-learning models to promote sustainable reuse and transparent digital commerce
